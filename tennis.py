@@ -73,6 +73,13 @@ class Game:
             2: "30",
             3: "40"
         }
+        if self._points[0] >= 3 and self._points[1] >=3:
+            if self._points[0] > self._points[1]:
+                return "Advantage player-1"
+            elif self._points[0] < self._points[1]:
+                return "Advantage player-2"
+            else:
+                return "Deuce"
         return "-".join([scores[self._points[0]], scores[self._points[1]]])
 
 
