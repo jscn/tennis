@@ -53,14 +53,34 @@ For example:
 "1-0"
 """
 
+class Game:
+    """A single Game in a Set."""
 
+    def __init__(self):
+        self._points = [0, 0]
+
+    def point_won_by(self, player):
+        if player == "player-1":
+            self._points[0] += 1
+        else:
+            self._points[1] += 1
+
+    def score(self):
+        """Return the current score."""
+        scores = {
+            0: "0",
+            1: "15",
+            2: "30",
+            3: "40"
+        }
+        return "-".join([scores[self._points[0]], scores[self._points[1]]])
 
 
 class Match:
     """A Tennis Match."""
 
     def score(self):
-        """Return the current score."""
+        """Return the current set score followed by the current game score."""
         return "0-0"
 
 
