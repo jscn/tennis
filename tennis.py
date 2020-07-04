@@ -53,34 +53,40 @@ For example:
 "1-0"
 """
 
+PLAYER_ONE = "player-1"
+PLAYER_TWO = "player-2"
+
 class Game:
     """A single Game in a Set."""
 
     def __init__(self):
-        self._points = [0, 0]
-
-    def point_won_by(self, player):
-        if player == "player-1":
-            self._points[0] += 1
-        else:
-            self._points[1] += 1
-
-    def score(self):
-        """Return the current score."""
-        scores = {
+        self._points = {
+            PLAYER_ONE: 0,
+            PLAYER_TWO: 0,
+        }
+        self._scores = {
             0: "0",
             1: "15",
             2: "30",
             3: "40"
         }
-        if self._points[0] >= 3 and self._points[1] >=3:
-            if self._points[0] > self._points[1]:
-                return "Advantage player-1"
-            elif self._points[0] < self._points[1]:
-                return "Advantage player-2"
+
+    def point_won_by(self, player):
+        self._points[player] += 1
+
+    def score(self):
+        """Return the current score."""
+        if self._points[PLAYER_ONE] >= 3 and self._points[PLAYER_TWO] >=3:
+            if self._points[PLAYER_ONE] > self._points[PLAYER_TWO]:
+                return f"Advantage {PLAYER_ONE}"
+            elif self._points[PLAYER_ONE] < self._points[PLAYER_TWO]:
+                return f"Advantage {PLAYER_TWO}"
             else:
                 return "Deuce"
-        return "-".join([scores[self._points[0]], scores[self._points[1]]])
+        return "-".join([
+            self._scores[self._points[PLAYER_ONE]],
+            self._scores[self._points[PLAYER_TWO]]
+        ])
 
 
 class Match:
