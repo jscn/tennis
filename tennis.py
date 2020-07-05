@@ -100,6 +100,41 @@ class Game:
             return PLAYER_TWO
 
 
+class Set:
+    """A single Set."""
+
+    def __init__(self):
+        self._games = [Game()]
+
+    def point_won_by(self, player):
+        if self._games[-1].winner():
+            self._games.append(Game())
+        self._games[-1].point_won_by(player)
+
+    def games_won(self):
+        winners = [game.winner() for game in self._games]
+        return {
+            PLAYER_ONE: winners.count(PLAYER_ONE),
+            PLAYER_TWO: winners.count(PLAYER_TWO),
+        }
+
+    def score(self):
+        """Return the current score."""
+        return "-".join([
+            str(self.games_won()[PLAYER_ONE]),
+            str(self.games_won()[PLAYER_TWO])
+        ])
+
+    def winner(self):
+        """Return the winner of the set."""
+        games_player_one = self.games_won()[PLAYER_ONE]
+        games_player_two = self.games_won()[PLAYER_TWO]
+        if games_player_one > 6 and games_player_one > games_player_two + 2:
+            return PLAYER_ONE
+        if games_player_two > 6 and games_player_two > games_player_one + 2:
+            return PLAYER_TWO
+
+
 class Match:
     """A Tennis Match."""
 

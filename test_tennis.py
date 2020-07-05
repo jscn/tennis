@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
 
-from tennis import Match, Game
+from tennis import Match, Game, Set
 
 
 class MatchTestCase(unittest.TestCase):
@@ -127,6 +127,72 @@ class GameTestCase(unittest.TestCase):
             game.point_won_by("player-2")
 
         self.assertEqual(game.score(), "")
+
+
+class SetTestCase(unittest.TestCase):
+
+    GAMES_TO_WIN_SET = 8
+    POINTS_TO_WIN_GAME = 5
+
+    def test_initial_set_score(self):
+        set_ = Set()
+
+        self.assertEqual(set_.score(), "0-0")
+
+    def test_score_when_no_games_won(self):
+        set_ = Set()
+        set_.point_won_by("player-1")
+
+        self.assertEqual(set_.score(), "0-0")
+
+    def test_score_when_player_one_wins_a_game(self):
+        set_ = Set()
+        for _ in range(self.POINTS_TO_WIN_GAME):
+            set_.point_won_by("player-1")
+
+        self.assertEqual(set_.score(), "1-0")
+
+    def test_score_when_player_two_wins_a_game(self):
+        set_ = Set()
+        for _ in range(self.POINTS_TO_WIN_GAME):
+            set_.point_won_by("player-2")
+
+        self.assertEqual(set_.score(), "0-1")
+
+    def test_no_initial_winner(self):
+        set_ = Set()
+
+        self.assertIsNone(set_.winner())
+
+    def test_no_winner_if_no_games_won(self):
+        set_ = Set()
+        for _ in range(self.POINTS_TO_WIN_GAME - 1):
+            set_.point_won_by("player-1")
+
+        self.assertIsNone(set_.winner())
+
+    def test_no_winner_if_one_game_won(self):
+        set_ = Set()
+        for _ in range(self.POINTS_TO_WIN_GAME):
+            set_.point_won_by("player-1")
+
+        self.assertIsNone(set_.winner())
+
+    def test_winner_player_one(self):
+        set_ = Set()
+        for _games in range(self.GAMES_TO_WIN_SET):
+            for _ in range(self.POINTS_TO_WIN_GAME):
+                set_.point_won_by("player-1")
+
+        self.assertEqual(set_.winner(), "player-1")
+
+    def test_winner_player_two(self):
+        set_ = Set()
+        for _games in range(self.GAMES_TO_WIN_SET):
+            for _ in range(self.POINTS_TO_WIN_GAME):
+                set_.point_won_by("player-2")
+
+        self.assertEqual(set_.winner(), "player-2")
 
 
 if __name__ == '__main__':
