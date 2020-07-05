@@ -153,7 +153,8 @@ class GameTestCase(unittest.TestCase):
 class SetTestCase(unittest.TestCase):
 
     GAMES_TO_WIN_SET = 8
-    POINTS_TO_WIN_GAME = 5
+    POINTS_TO_WIN_GAME = 4
+    POINTS_TO_WIN_TIE_BREAKER = 7
 
     def test_initial_set_score(self):
         set_ = Set()
@@ -212,6 +213,38 @@ class SetTestCase(unittest.TestCase):
         for _games in range(self.GAMES_TO_WIN_SET):
             for _ in range(self.POINTS_TO_WIN_GAME):
                 set_.point_won_by("player-2")
+
+        self.assertEqual(set_.winner(), "player-2")
+
+    def test_tie_is_broken_by_player_one(self):
+        set_ = Set()
+        for _games in range(6):
+            for _ in range(self.POINTS_TO_WIN_GAME):
+                set_.point_won_by("player-1")
+
+        for _games in range(6):
+            for _ in range(self.POINTS_TO_WIN_GAME):
+                set_.point_won_by("player-2")
+
+        # Final game is a tie-breaker
+        for _ in range(self.POINTS_TO_WIN_TIE_BREAKER):
+            set_.point_won_by("player-1")
+
+        self.assertEqual(set_.winner(), "player-1")
+
+    def test_tie_is_broken_by_player_two(self):
+        set_ = Set()
+        for _games in range(6):
+            for _ in range(self.POINTS_TO_WIN_GAME):
+                set_.point_won_by("player-1")
+
+        for _games in range(6):
+            for _ in range(self.POINTS_TO_WIN_GAME):
+                set_.point_won_by("player-2")
+
+        # Final game is a tie-breaker
+        for _ in range(self.POINTS_TO_WIN_TIE_BREAKER):
+            set_.point_won_by("player-2")
 
         self.assertEqual(set_.winner(), "player-2")
 

@@ -127,7 +127,11 @@ class Set:
 
     def point_won_by(self, player):
         if self._games[-1].winner():
-            self._games.append(Game())
+            if self.games_won()[PLAYER_ONE] == 6 and self.games_won()[PLAYER_TWO] == 6:
+                game = TieBreakGame()
+            else:
+                game = Game()
+            self._games.append(game)
         self._games[-1].point_won_by(player)
 
     def games_won(self):
@@ -146,6 +150,9 @@ class Set:
 
     def winner(self):
         """Return the winner of the set."""
+        if isinstance(self._games[-1], TieBreakGame):
+            return self._games[-1].winner()
+
         games_player_one = self.games_won()[PLAYER_ONE]
         games_player_two = self.games_won()[PLAYER_TWO]
         if games_player_one > 6 and games_player_one > games_player_two + 2:
