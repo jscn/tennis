@@ -345,5 +345,6 @@ class TieBreakGameTest(unittest.TestCase):
 
         self.assertEqual(game.score(), "")
 
+
 if __name__ == '__main__':
     unittest.main()
