@@ -100,6 +100,35 @@ class Game:
             return PLAYER_TWO
 
 
+class TieBreakGame:
+
+    def __init__(self):
+        self._points = {
+            PLAYER_ONE: 0,
+            PLAYER_TWO: 0,
+        }
+
+    def point_won_by(self, player):
+        self._points[player] += 1
+
+    def score(self):
+        if self.winner():
+            return ""
+
+        return "-".join([
+            str(self._points[PLAYER_ONE]),
+            str(self._points[PLAYER_TWO])
+        ])
+
+    def winner(self):
+        if self._points[PLAYER_ONE] > 7 and self._points[PLAYER_ONE] > self._points[PLAYER_TWO] + 1:
+            return PLAYER_ONE
+        if self._points[PLAYER_TWO] > 7 and self._points[PLAYER_TWO] > self._points[PLAYER_ONE] + 1:
+            return PLAYER_TWO
+
+
+
+
 class Set:
     """A single Set."""
 

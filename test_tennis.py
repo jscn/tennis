@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
 
-from tennis import Match, Game, Set
+from tennis import Match, Game, Set, TieBreakGame
 
 
 class MatchTestCase(unittest.TestCase):
@@ -194,6 +194,69 @@ class SetTestCase(unittest.TestCase):
 
         self.assertEqual(set_.winner(), "player-2")
 
+
+class TieBreakGameTest(unittest.TestCase):
+
+    MINIMUM_POINTS = 7
+    MINIMUM_LEAD = 2
+
+    def test_initial_winner(self):
+        game = TieBreakGame()
+
+        self.assertIsNone(game.winner())
+
+    def test_winner_player_one(self):
+        game = TieBreakGame()
+
+        for _ in range(self.MINIMUM_POINTS + self.MINIMUM_LEAD):
+            game.point_won_by("player-1")
+
+        self.assertEqual(game.winner(), "player-1")
+
+    def test_winner_player_two(self):
+        game = TieBreakGame()
+
+        for _ in range(self.MINIMUM_POINTS + self.MINIMUM_LEAD):
+            game.point_won_by("player-2")
+
+        self.assertEqual(game.winner(), "player-2")
+
+    def test_score_with_no_points(self):
+        game = TieBreakGame()
+
+        self.assertEqual(game.score(), "0-0")
+
+    def test_score_with_player_one_points(self):
+        game = TieBreakGame()
+        game.point_won_by("player-1")
+        game.point_won_by("player-1")
+        game.point_won_by("player-1")
+
+        self.assertEqual(game.score(), "3-0")
+
+    def test_score_with_player_two_points(self):
+        game = TieBreakGame()
+        game.point_won_by("player-2")
+        game.point_won_by("player-2")
+
+        self.assertEqual(game.score(), "0-2")
+
+    def test_score_with_mixed_points(self):
+        game = TieBreakGame()
+        game.point_won_by("player-2")
+        game.point_won_by("player-1")
+        game.point_won_by("player-2")
+        game.point_won_by("player-2")
+        game.point_won_by("player-2")
+
+        self.assertEqual(game.score(), "1-4")
+
+    def test_score_is_empty_when_game_is_won(self):
+        game = TieBreakGame()
+        for _ in range(self.MINIMUM_POINTS + self.MINIMUM_LEAD):
+            game.point_won_by("player-2")
+
+        self.assertEqual(game.score(), "")
 
 if __name__ == '__main__':
     unittest.main()
