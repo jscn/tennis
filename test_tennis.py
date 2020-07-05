@@ -120,7 +120,7 @@ class GameTestCase(unittest.TestCase):
 
     def test_score_is_empty_when_game_is_won(self):
         game = Game()
-        for _ in range(54):
+        for _ in range(4):
             game.point_won_by("player-1")
 
         for _ in range(6):
