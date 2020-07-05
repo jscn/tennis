@@ -56,8 +56,12 @@ For example:
 PLAYER_ONE = "player-1"
 PLAYER_TWO = "player-2"
 
+
 class Game:
     """A single Game in a Set."""
+
+    MINIMUM_POINTS = 4
+    MINIMUM_LEAD = 2
 
     def __init__(self):
         self._points = {
@@ -65,11 +69,15 @@ class Game:
             PLAYER_TWO: 0,
         }
         self._scores = {
-            0: "0",
-            1: "15",
-            2: "30",
-            3: "40"
+            0: 0,
+            1: 15,
+            2: 30,
+            3: 40,
         }
+
+    def _score(self, player):
+        """Return the score for the given player."""
+        return str(self._scores[self._points[player]])
 
     def point_won_by(self, player):
         self._points[player] += 1
@@ -88,43 +96,27 @@ class Game:
                 return "Deuce"
 
         return "-".join([
-            self._scores[self._points[PLAYER_ONE]],
-            self._scores[self._points[PLAYER_TWO]]
+            self._score(PLAYER_ONE),
+            self._score(PLAYER_TWO),
         ])
 
     def winner(self):
         """Return the winner of the game."""
-        if self._points[PLAYER_ONE] >= 4 and self._points[PLAYER_ONE] - self._points[PLAYER_TWO] >= 2:
+        if (self._points[PLAYER_ONE] >= self.MINIMUM_POINTS and
+            self._points[PLAYER_ONE] - self._points[PLAYER_TWO] >= self.MINIMUM_LEAD):
             return PLAYER_ONE
-        if self._points[PLAYER_TWO] >= 4 and self._points[PLAYER_TWO] - self._points[PLAYER_ONE] >= 2:
+        if (self._points[PLAYER_TWO] >= self.MINIMUM_POINTS and
+            self._points[PLAYER_TWO] - self._points[PLAYER_ONE] >= self.MINIMUM_LEAD):
             return PLAYER_TWO
 
 
-class TieBreakGame:
+class TieBreakGame(Game):
 
-    def __init__(self):
-        self._points = {
-            PLAYER_ONE: 0,
-            PLAYER_TWO: 0,
-        }
+    MINIMUM_POINTS = 7
 
-    def point_won_by(self, player):
-        self._points[player] += 1
-
-    def score(self):
-        if self.winner():
-            return ""
-
-        return "-".join([
-            str(self._points[PLAYER_ONE]),
-            str(self._points[PLAYER_TWO])
-        ])
-
-    def winner(self):
-        if self._points[PLAYER_ONE] >= 7 and self._points[PLAYER_ONE] - self._points[PLAYER_TWO] >= 2:
-            return PLAYER_ONE
-        if self._points[PLAYER_TWO] >= 7 and self._points[PLAYER_TWO] - self._points[PLAYER_ONE] >= 2:
-            return PLAYER_TWO
+    def _score(self, player):
+        """Return the score for the given player."""
+        return str(self._points[player])
 
 
 class Set:
