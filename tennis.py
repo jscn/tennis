@@ -76,6 +76,9 @@ class Game:
 
     def score(self):
         """Return the current score."""
+        if self.winner():
+            return ""
+
         if self._points[PLAYER_ONE] >= 3 and self._points[PLAYER_TWO] >=3:
             if self._points[PLAYER_ONE] > self._points[PLAYER_TWO]:
                 return f"Advantage {PLAYER_ONE}"
@@ -83,10 +86,18 @@ class Game:
                 return f"Advantage {PLAYER_TWO}"
             else:
                 return "Deuce"
+
         return "-".join([
             self._scores[self._points[PLAYER_ONE]],
             self._scores[self._points[PLAYER_TWO]]
         ])
+
+    def winner(self):
+        """Return the winner of the game."""
+        if self._points[PLAYER_ONE] > 4 and self._points[PLAYER_ONE] > self._points[PLAYER_TWO] + 1:
+            return PLAYER_ONE
+        if self._points[PLAYER_TWO] > 4 and self._points[PLAYER_TWO] > self._points[PLAYER_ONE] + 1:
+            return PLAYER_TWO
 
 
 class Match:

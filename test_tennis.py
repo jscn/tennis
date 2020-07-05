@@ -84,6 +84,50 @@ class GameTestCase(unittest.TestCase):
 
         self.assertEqual(game.score(), "Advantage player-2")
 
+    def test_player_one_wins_all(self):
+        game = Game()
+        for _ in range(5):
+            game.point_won_by("player-1")
+
+        self.assertEqual(game.winner(), "player-1")
+
+    def test_player_two_wins_all(self):
+        game = Game()
+        for _ in range(5):
+            game.point_won_by("player-2")
+
+        self.assertEqual(game.winner(), "player-2")
+
+    def test_player_one_ahead_by_one_no_winner(self):
+        game = Game()
+        for _ in range(6):
+            game.point_won_by("player-1")
+
+        for _ in range(5):
+            game.point_won_by("player-2")
+
+        self.assertIsNone(game.winner())
+
+    def test_player_two_ahead_by_one_no_winner(self):
+        game = Game()
+        for _ in range(5):
+            game.point_won_by("player-1")
+
+        for _ in range(6):
+            game.point_won_by("player-2")
+
+        self.assertIsNone(game.winner())
+
+    def test_score_is_empty_when_game_is_won(self):
+        game = Game()
+        for _ in range(54):
+            game.point_won_by("player-1")
+
+        for _ in range(6):
+            game.point_won_by("player-2")
+
+        self.assertEqual(game.score(), "")
+
 
 if __name__ == '__main__':
     unittest.main()
