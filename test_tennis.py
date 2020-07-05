@@ -10,9 +10,22 @@ from tennis import Match, Game, Set, TieBreakGame
 
 class MatchTestCase(unittest.TestCase):
 
-    def test_score_with_no_points(self):
+    def test_match_spec(self):
         match = Match("player 1", "player 2")
-        self.assertEqual(match.score(), "0-0")
+        match.point_won_by("player 1")
+        match.point_won_by("player 2")
+        self.assertEqual(match.score(), "0-0, 15-15")
+
+        match.point_won_by("player 1")
+        match.point_won_by("player 1")
+        self.assertEqual(match.score(), "0-0, 40-15")
+        match.point_won_by("player 2")
+        match.point_won_by("player 2")
+        self.assertEqual(match.score(), "0-0, Deuce")
+        match.point_won_by("player 1")
+        self.assertEqual(match.score(), "0-0, Advantage player 1")
+        match.point_won_by("player 1")
+        self.assertEqual(match.score(), "1-0")
 
 
 class GameTestCase(unittest.TestCase):

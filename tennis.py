@@ -169,11 +169,20 @@ class Match:
     """A Tennis Match."""
 
     def __init__(self, player_one, player_two):
-        pass
+        self._set = Set(player_one, player_two)
+
+    def point_won_by(self, player):
+        self._set.point_won_by(player)
 
     def score(self):
         """Return the current set score followed by the current game score."""
-        return "0-0"
+        game_score = self._set._games[-1].score()
+        set_score = self._set.score()
+
+        if set_score and game_score:
+            return ", ".join([set_score, game_score])
+        return set_score
+        self._set = Set(player_one, player_two)
 
 
 if __name__ == '__main__':
