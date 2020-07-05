@@ -94,9 +94,9 @@ class Game:
 
     def winner(self):
         """Return the winner of the game."""
-        if self._points[PLAYER_ONE] > 4 and self._points[PLAYER_ONE] > self._points[PLAYER_TWO] + 1:
+        if self._points[PLAYER_ONE] >= 4 and self._points[PLAYER_ONE] - self._points[PLAYER_TWO] >= 2:
             return PLAYER_ONE
-        if self._points[PLAYER_TWO] > 4 and self._points[PLAYER_TWO] > self._points[PLAYER_ONE] + 1:
+        if self._points[PLAYER_TWO] >= 4 and self._points[PLAYER_TWO] - self._points[PLAYER_ONE] >= 2:
             return PLAYER_TWO
 
 
@@ -121,12 +121,10 @@ class TieBreakGame:
         ])
 
     def winner(self):
-        if self._points[PLAYER_ONE] > 7 and self._points[PLAYER_ONE] > self._points[PLAYER_TWO] + 1:
+        if self._points[PLAYER_ONE] >= 7 and self._points[PLAYER_ONE] - self._points[PLAYER_TWO] >= 2:
             return PLAYER_ONE
-        if self._points[PLAYER_TWO] > 7 and self._points[PLAYER_TWO] > self._points[PLAYER_ONE] + 1:
+        if self._points[PLAYER_TWO] >= 7 and self._points[PLAYER_TWO] - self._points[PLAYER_ONE] >= 2:
             return PLAYER_TWO
-
-
 
 
 class Set:

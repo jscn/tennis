@@ -52,7 +52,7 @@ class GameTestCase(unittest.TestCase):
 
     def test_deuce_for_four_points(self):
         game = Game()
-        for _ in range(3):
+        for _ in range(4):
             game.point_won_by("player-1")
             game.point_won_by("player-2")
 
@@ -60,7 +60,7 @@ class GameTestCase(unittest.TestCase):
 
     def test_deuce_for_five_points(self):
         game = Game()
-        for _ in range(4):
+        for _ in range(5):
             game.point_won_by("player-1")
             game.point_won_by("player-2")
 
@@ -100,23 +100,44 @@ class GameTestCase(unittest.TestCase):
 
     def test_player_one_ahead_by_one_no_winner(self):
         game = Game()
-        for _ in range(6):
+        for _ in range(5):
             game.point_won_by("player-1")
 
-        for _ in range(5):
+        for _ in range(4):
             game.point_won_by("player-2")
 
         self.assertIsNone(game.winner())
 
     def test_player_two_ahead_by_one_no_winner(self):
         game = Game()
-        for _ in range(5):
+        for _ in range(4):
             game.point_won_by("player-1")
 
-        for _ in range(6):
+        for _ in range(5):
             game.point_won_by("player-2")
 
         self.assertIsNone(game.winner())
+
+    def test_player_one_wins_closest_possible_match(self):
+        game = Game()
+        for _ in range(2):
+            game.point_won_by("player-2")
+
+        for _ in range(4):
+            game.point_won_by("player-1")
+
+        self.assertEqual(game.winner(), "player-1")
+
+    def test_player_two_wins_closest_possible_match(self):
+        game = Game()
+        for _ in range(2):
+            game.point_won_by("player-1")
+
+        for _ in range(4):
+            game.point_won_by("player-2")
+
+        self.assertEqual(game.winner(), "player-2")
+
 
     def test_score_is_empty_when_game_is_won(self):
         game = Game()
@@ -217,6 +238,26 @@ class TieBreakGameTest(unittest.TestCase):
         game = TieBreakGame()
 
         for _ in range(self.MINIMUM_POINTS + self.MINIMUM_LEAD):
+            game.point_won_by("player-2")
+
+        self.assertEqual(game.winner(), "player-2")
+
+    def test_player_one_wins_closest_possible_tiebreaker(self):
+        game = TieBreakGame()
+        for _ in range(5):
+            game.point_won_by("player-2")
+
+        for _ in range(7):
+            game.point_won_by("player-1")
+
+        self.assertEqual(game.winner(), "player-1")
+
+    def test_player_two_wins_closest_possible_tiebreaker(self):
+        game = TieBreakGame()
+        for _ in range(5):
+            game.point_won_by("player-1")
+
+        for _ in range(7):
             game.point_won_by("player-2")
 
         self.assertEqual(game.winner(), "player-2")
